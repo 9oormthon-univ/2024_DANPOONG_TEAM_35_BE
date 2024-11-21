@@ -19,7 +19,7 @@ public class ExperienceKeywords {
     @JoinColumn(name = "experience_id", nullable = false)
     private Experience experience;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "keyword_id",nullable = false)
     private Keywords keyword;
 
@@ -28,7 +28,4 @@ public class ExperienceKeywords {
         this.experience = experience;
         this.keyword = keyword;
     }
-
-
-
 }

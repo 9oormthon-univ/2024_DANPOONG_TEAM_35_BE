@@ -16,9 +16,14 @@ public class Keywords {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "keyword_id")
     private Long id;
 
-    private String name;
+    private String name; //키워드명
+
+    @OneToOne(mappedBy = "keyword")
+    private InfoKeywords infoKeywords;
+
+    @OneToOne(mappedBy = "keyword")
+    private ExperienceKeywords experienceKeywords;
 
 }
