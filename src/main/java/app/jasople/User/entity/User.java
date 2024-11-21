@@ -4,14 +4,18 @@ import app.jasople.Essay.entity.Essay;
 import app.jasople.Experience.entity.Experience;
 import app.jasople.IndustryInfo.entity.ScrapedInfo;
 import app.jasople.Job.entity.InterestedJob;
+import app.jasople.User.entity.enums.ReceiveAds;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class User {
 
@@ -20,10 +24,13 @@ public class User {
     private Long id;
 
     @Column
-    private String nickName; // 닉네임
+    private String password; // 비밀번호
 
     @Column
     private String email; // 이메일
+
+    @Column
+    private ReceiveAds receiveAds; // 맞춤형 채용광고 수신 여부
 
     @OneToOne(mappedBy = "user")
     private UserProfile userProfile;
@@ -39,4 +46,11 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<ScrapedInfo> scrapedInfo;
+
+    @Builder
+    public User(String password, String email, ReceiveAds receiveAds) {
+        this.password = password;
+        this.email = email;
+        this.receiveAds = receiveAds;
+    }
 }
