@@ -1,8 +1,8 @@
 package app.jasople.User.entity;
 
+import app.jasople.User.dto.UserProfileDtoRes;
 import app.jasople.User.entity.enums.Career;
 import app.jasople.User.entity.enums.FinalEducation;
-import app.jasople.User.entity.enums.ReceiveAds;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,5 +56,11 @@ public class UserProfile {
         return UserProfile.builder()
                 .user(user)
                 .build();
+    }
+
+    public void updateEntity(UserProfileDtoRes.UserProfileUpdate dto) {
+        if (dto.getNickName() != null) {
+            this.nickName = dto.getNickName();
+        }
     }
 }

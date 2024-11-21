@@ -18,4 +18,12 @@ public class UserProfileDtoRes {
         private String nickName;
         private ReceiveAds receiveAds;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class UserProfileUpdate {
+        private String nickName;
+        private ReceiveAds receiveAds;
+    }
 }

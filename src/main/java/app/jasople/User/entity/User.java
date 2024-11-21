@@ -54,4 +54,19 @@ public class User {
         this.password = password;
         this.receiveAds = receiveAds;
     }
+
+    public User update(String password, String email, ReceiveAds receiveAds) {
+
+        this.password = password;
+        this.email = email;
+        this.receiveAds = receiveAds;
+
+        return this;
+    }
+
+    public void update(ReceiveAds receiveAds) {
+        if (receiveAds != null) {
+            this.receiveAds = receiveAds;
+        }
+    }
 }
