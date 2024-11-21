@@ -1,6 +1,9 @@
 package app.jasople.Experience.entity;
 
 import app.jasople.Category.entity.Category;
+import app.jasople.Essay.entity.EssayFormat;
+import app.jasople.Keywords.entity.ExperienceKeywords;
+import app.jasople.User.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -23,6 +27,16 @@ public class Experience {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToOne(mappedBy = "experience")
+    private EssayFormat essayFormat;
+
+    @OneToMany(mappedBy = "experience")
+    private List<ExperienceKeywords> experienceKeywords;
 
     private String title;
     @Lob
