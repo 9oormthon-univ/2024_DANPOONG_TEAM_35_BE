@@ -3,6 +3,7 @@ package app.jasople.IndustryInfo.entity;
 import app.jasople.Category.entity.Category;
 import app.jasople.Keywords.entity.InfoKeywords;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,13 +18,22 @@ public class IndustryInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+
+    private String content;
+
     @OneToOne(mappedBy = "industryInfo")
     private ScrapedInfo scrapedInfo;
 
-    @OneToOne(mappedBy = "industryInfo")
-    private InfoKeywords infoKeywords;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category categories;
+    private String category;
+
+    @Builder
+    public IndustryInfo(String title, String content,String category) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+    }
+
+
 }

@@ -43,7 +43,5 @@ public class ExperienceController {
 
     // 경험 삭제
 
-    // 경험 조회
-
-    // 경험 목록 조회
+    // 경험 수정
 }
