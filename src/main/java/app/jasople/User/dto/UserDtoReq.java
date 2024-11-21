@@ -14,4 +14,12 @@ public class UserDtoReq {
         String password;
         ReceiveAds receiveAds; //맞춤형 채용광고 수신 여부
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LoginReq {
+        String email;
+        String password;
+    }
 }

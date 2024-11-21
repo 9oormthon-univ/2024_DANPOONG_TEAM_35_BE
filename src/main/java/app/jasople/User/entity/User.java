@@ -26,7 +26,7 @@ public class User {
     @Column
     private String password; // 비밀번호
 
-    @Column
+    @Column(unique = true)
     private String email; // 이메일
 
     @Column

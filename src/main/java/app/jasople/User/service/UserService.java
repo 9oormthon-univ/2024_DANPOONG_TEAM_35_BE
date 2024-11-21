@@ -28,4 +28,9 @@ public class UserService {
 
         return user;
     }
+
+    public User login(UserDtoReq.LoginReq loginDto) {
+
+        return userRepository.findByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
+    }
 }
