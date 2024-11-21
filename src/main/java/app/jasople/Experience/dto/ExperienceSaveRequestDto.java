@@ -2,6 +2,7 @@ package app.jasople.Experience.dto;
 
 import app.jasople.Category.entity.Category;
 import app.jasople.Experience.entity.Experience;
+import app.jasople.User.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,10 +36,11 @@ public class ExperienceSaveRequestDto {
 
     private List<Long> keywordList;
 
-    public Experience ToEntity(Category category){
+    public Experience ToEntity(Category category, User user){
         Experience newExperience = Experience.builder()
                 .title(title)
                 .category(category)
+                .user(user)
                 .background(background)
                 .solution(solution)
                 .result(result)

@@ -7,7 +7,9 @@ import app.jasople.IndustryInfo.entity.IndustryInfoRepository;
 import app.jasople.IndustryInfo.entity.ScrapedInfo;
 import app.jasople.IndustryInfo.entity.ScrapedInfoRepository;
 import app.jasople.Keywords.entity.InfoKeywords;
+import app.jasople.Keywords.entity.InfoKeywordsRepository;
 import app.jasople.User.entity.User;
+import app.jasople.User.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,10 @@ public class IndustryInfoService {
     private final IndustryInfoRepository industryInfoRepository;
 
     private final ScrapedInfoRepository scrapedInfoRepository;
+
+    private final UserRepository userRepository;
+
+    private final InfoKeywordsRepository infoKeywordsRepository;
 
     // 개별 조회
     @Transactional
@@ -40,6 +46,36 @@ public class IndustryInfoService {
                 .collect(Collectors.toList());
     }
 
+    // 스크랩 생성
+    @Transactional
+    public IndustryInfoResponseDto scrapInfo(IndustryInfoScrapDto requestDto, User user) {
+        IndustryInfo industryInfo = industryInfoRepository.findById(requestDto.getIndustryInfoId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않는 id입니다 : " + requestDto.getIndustryInfoId()));
+
+        List<InfoKeywords> keywords = infoKeywordsRepository.findAllById(requestDto.getKeywordIds());
+
+        ScrapedInfo scrap = requestDto.toEntity(industryInfo, keywords, user);
+        scrapedInfoRepository.save(scrap);
+        return new IndustryInfoResponseDto(industryInfo);
+    }
+
+    // 스크랩한 항목 조회
+    @Transactional
+    public List<IndustryInfoResponseDto> findScrapedByUser(User user) {
+        List<ScrapedInfo> scrapedInfoList = scrapedInfoRepository.findByUser(user);
+        return scrapedInfoList.stream()
+                .map(scrap -> new IndustryInfoResponseDto(scrap.getIndustryInfo()))
+                .collect(Collectors.toList());
+    }
+
+    // 목록에서 검색 기능
+    @Transactional
+    public List<IndustryInfoResponseDto> searchByKeyword(String keyword) {
+        List<IndustryInfo> searchResults = industryInfoRepository.findByTitleContainingOrContentContaining(keyword, keyword);
+        return searchResults.stream()
+                .map(IndustryInfoResponseDto::new)
+                .collect(Collectors.toList());
+    }
 
 
 }

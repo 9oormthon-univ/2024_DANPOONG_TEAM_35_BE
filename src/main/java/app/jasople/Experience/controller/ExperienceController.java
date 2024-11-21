@@ -1,13 +1,14 @@
 package app.jasople.Experience.controller;
+import app.jasople.Config.ApiResponse;
 import app.jasople.Experience.dto.ExperienceResponseDto;
 import app.jasople.Experience.dto.ExperienceSaveRequestDto;
 import app.jasople.Experience.entity.Experience;
 import app.jasople.Experience.service.ExperienceService;
+import app.jasople.security.CustomUserDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,26 +23,23 @@ public class ExperienceController {
 
     @Operation(summary = "경험시트 생성 API", description = "경험시트를 생성합니다.")
     @PostMapping("/write")
-    public ResponseEntity<ExperienceResponseDto> saveExperience(@RequestBody ExperienceSaveRequestDto requestDto) {
-        ExperienceResponseDto savedExperience = experienceService.save(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedExperience);
+    public ApiResponse<ExperienceResponseDto> saveExperience(@RequestBody ExperienceSaveRequestDto requestDto, @AuthenticationPrincipal CustomUserDetail userDetail) {
+        return ApiResponse.onSuccess(experienceService.save(requestDto,userDetail.getUser()));
     }
 
     @Operation(summary = "경험시트 조회 API", description = "경험시트를 ID로 조회합니다.")
     @GetMapping("/view/{exId}")
-    public ResponseEntity<ExperienceResponseDto> viewExperience(@PathVariable Long exId) {
-        ExperienceResponseDto experience = experienceService.findById(exId);
-        return ResponseEntity.ok(experience);
+    public ApiResponse<ExperienceResponseDto> viewExperience(@PathVariable Long exId, @AuthenticationPrincipal CustomUserDetail userDetail) {
+        ExperienceResponseDto experience = experienceService.findById(exId,userDetail.getUser());
+        return ApiResponse.onSuccess(experience);
     }
 
     @Operation(summary = "경험시트 리스트 조회 API", description = "모든 경험시트 리스트를 조회합니다.")
     @GetMapping("/view/all")
-    public ResponseEntity<List<ExperienceResponseDto>> viewAll() {
-        List<ExperienceResponseDto> experiences = experienceService.findList();
-        return ResponseEntity.ok(experiences);
+    public ApiResponse<List<ExperienceResponseDto>> viewAll(@AuthenticationPrincipal CustomUserDetail userDetail) {
+        List<ExperienceResponseDto> experiences = experienceService.findList(userDetail.getUser());
+        return ApiResponse.onSuccess(experiences);
     }
 
-    // 경험 삭제
 
-    // 경험 수정
 }
