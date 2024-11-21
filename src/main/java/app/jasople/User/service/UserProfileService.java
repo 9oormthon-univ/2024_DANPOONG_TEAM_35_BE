@@ -62,4 +62,18 @@ public class UserProfileService {
 
         return ApiResponse.onSuccess("성공입니다");
     }
+
+    public ApiResponse<String> deleteProfile(Long userId, UserProfileDtoRes.UserProfileDelete userProfileDto) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
+        UserProfile userProfile = userProfileRepository.findByUser(user).orElseThrow(() -> new IllegalArgumentException("해당 유저의 프로필이 없습니다."));
+
+
+        if (!passwordEncoder.matches(userProfileDto.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
+        }
+
+        userRepository.delete(user);
+
+        return ApiResponse.onSuccess("성공입니다");
+    }
 }

@@ -35,4 +35,11 @@ public class UserProfileDtoRes {
         private String password;
         private String newPassword;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserProfileDelete {
+        private String password;
+    }
 }

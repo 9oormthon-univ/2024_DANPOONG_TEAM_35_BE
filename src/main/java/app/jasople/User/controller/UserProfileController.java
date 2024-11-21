@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/userProfile")
+@RequestMapping("/api/userprofile")
 @RequiredArgsConstructor
 @Tag(name = "유저 프로필 api", description = "유저 프로필 Api입니다.")
 public class UserProfileController {
@@ -52,5 +52,15 @@ public class UserProfileController {
 
         log.debug("userId : {}", userId);
         return userProfileService.updatePassword(userId, userPasswordUpdate);
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "유저 프로필 삭제 API", description = "사용자의 프로필을 삭제합니다.")
+    public ApiResponse<String> deleteProfile(@RequestBody UserProfileDtoRes.UserProfileDelete userProfileDelete , HttpServletRequest request) {
+
+        Long userId = jwtTokenProvider.getUserIdFromToken(request);
+
+        log.debug("userId : {}", userId);
+        return userProfileService.deleteProfile(userId, userProfileDelete);
     }
 }

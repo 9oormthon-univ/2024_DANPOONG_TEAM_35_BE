@@ -33,19 +33,19 @@ public class User {
     @Column
     private ReceiveAds receiveAds; // 맞춤형 채용광고 수신 여부
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user" ,cascade = CascadeType.REMOVE)
     private UserProfile userProfile;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.REMOVE)
     private List<InterestedJob> interestedJob = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.REMOVE)
     private List<Essay> essay = new ArrayList<>();;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.REMOVE)
     private List<Experience> experience = new ArrayList<>();;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.REMOVE)
     private List<ScrapedInfo> scrapedInfo = new ArrayList<>();;
 
     @Builder
