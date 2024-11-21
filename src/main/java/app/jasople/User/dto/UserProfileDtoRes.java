@@ -26,4 +26,13 @@ public class UserProfileDtoRes {
         private String nickName;
         private ReceiveAds receiveAds;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserPasswordUpdate {
+        private String password;
+        private String newPassword;
+    }
 }

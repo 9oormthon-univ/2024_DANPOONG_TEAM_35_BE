@@ -35,14 +35,22 @@ public class UserProfileController {
 
     @PatchMapping("/update")
     @Operation(summary = "유저 프로필 수정 API", description = "사용자의 프로필을 수정합니다.")
-    public ApiResponse<ApiResponse<String>> updateProfile(@RequestBody UserProfileDtoRes.UserProfileUpdate userProfileUpdate, HttpServletRequest request) {
+    public ApiResponse<String> updateProfile(@RequestBody UserProfileDtoRes.UserProfileUpdate userProfileUpdate, HttpServletRequest request) {
 
 
         Long userId = jwtTokenProvider.getUserIdFromToken(request);
 
         log.debug("userId : {}", userId);
-        return ApiResponse.onSuccess(userProfileService.updateProfile(userId, userProfileUpdate));
+        return userProfileService.updateProfile(userId, userProfileUpdate);
     }
 
+    @PatchMapping("/pwdupdate")
+    @Operation(summary = "유저 비밀번호 수정 API", description = "사용자의 비밀번호를 수정합니다.")
+    public ApiResponse<String> updatePassword(@RequestBody UserProfileDtoRes.UserPasswordUpdate userPasswordUpdate, HttpServletRequest request) {
 
+        Long userId = jwtTokenProvider.getUserIdFromToken(request);
+
+        log.debug("userId : {}", userId);
+        return userProfileService.updatePassword(userId, userPasswordUpdate);
+    }
 }

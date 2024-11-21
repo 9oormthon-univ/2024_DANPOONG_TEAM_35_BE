@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class UserProfileService {
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private final PasswordEncoder passwordEncoder;
 
 
     public UserProfileDtoRes.UserProfileGet getProfile(Long userId) {
@@ -44,6 +46,19 @@ public class UserProfileService {
 
         userRepository.save(user);
         userProfileRepository.save(userProfile);
+
+        return ApiResponse.onSuccess("성공입니다");
+    }
+
+    public ApiResponse<String> updatePassword(Long userId, UserProfileDtoRes.UserPasswordUpdate userPasswordUpdate) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
+
+        if (!passwordEncoder.matches(userPasswordUpdate.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
+        }
+
+        user.updatePassword(passwordEncoder.encode(userPasswordUpdate.getNewPassword()));
+        userRepository.save(user);
 
         return ApiResponse.onSuccess("성공입니다");
     }

@@ -69,4 +69,8 @@ public class User {
             this.receiveAds = receiveAds;
         }
     }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
