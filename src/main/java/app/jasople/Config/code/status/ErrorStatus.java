@@ -18,6 +18,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
 
     // 멤버 관려 에러
+
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다."),
     USER_NOT_ACTIVE(HttpStatus.BAD_REQUEST, "USER4002", "사용자는 활성 상태가 아닙니다."),
     USER_NICKNAME_DUPLICATED(HttpStatus.BAD_REQUEST, "USER4003", "닉네임이 이미 존재합니다."),
@@ -149,6 +150,8 @@ public enum ErrorStatus implements BaseErrorCode {
                 .isSuccess(false)
                 .build();
     }
+
+
 
     @Override
     public ErrorReasonDTO getReasonHttpStatus() {

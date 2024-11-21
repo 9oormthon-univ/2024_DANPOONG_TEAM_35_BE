@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -36,21 +37,21 @@ public class User {
     private UserProfile userProfile;
 
     @OneToMany(mappedBy = "user")
-    private List<InterestedJob> interestedJob;
+    private List<InterestedJob> interestedJob = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Essay> essay;
+    private List<Essay> essay = new ArrayList<>();;
 
     @OneToMany(mappedBy = "user")
-    private List<Experience> experience;
+    private List<Experience> experience = new ArrayList<>();;
 
     @OneToMany(mappedBy = "user")
-    private List<ScrapedInfo> scrapedInfo;
+    private List<ScrapedInfo> scrapedInfo = new ArrayList<>();;
 
     @Builder
     public User(String password, String email, ReceiveAds receiveAds) {
-        this.password = password;
         this.email = email;
+        this.password = password;
         this.receiveAds = receiveAds;
     }
 }
