@@ -7,6 +7,7 @@ import app.jasople.IndustryInfo.entity.IndustryInfoRepository;
 import app.jasople.IndustryInfo.entity.ScrapedInfo;
 import app.jasople.IndustryInfo.entity.ScrapedInfoRepository;
 import app.jasople.Keywords.entity.InfoKeywords;
+
 import app.jasople.Keywords.entity.InfoKeywordsRepository;
 import app.jasople.User.entity.User;
 import app.jasople.User.repository.UserRepository;

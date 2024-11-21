@@ -2,7 +2,6 @@ package app.jasople.Experience.controller;
 import app.jasople.Config.ApiResponse;
 import app.jasople.Experience.dto.ExperienceResponseDto;
 import app.jasople.Experience.dto.ExperienceSaveRequestDto;
-import app.jasople.Experience.entity.Experience;
 import app.jasople.Experience.service.ExperienceService;
 import app.jasople.security.CustomUserDetail;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +39,5 @@ public class ExperienceController {
         List<ExperienceResponseDto> experiences = experienceService.findList(userDetail.getUser());
         return ApiResponse.onSuccess(experiences);
     }
-
 
 }
