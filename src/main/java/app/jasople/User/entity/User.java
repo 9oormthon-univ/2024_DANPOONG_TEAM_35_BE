@@ -5,6 +5,7 @@ import app.jasople.Experience.entity.Experience;
 import app.jasople.IndustryInfo.entity.ScrapedInfo;
 import app.jasople.Job.entity.InterestedJob;
 import app.jasople.User.entity.enums.ReceiveAds;
+import app.jasople.User.entity.enums.Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,10 @@ public class User {
     @Column
     private ReceiveAds receiveAds; // 맞춤형 채용광고 수신 여부
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Type type; // 회원 타입
+
     @OneToOne(mappedBy = "user" ,cascade = CascadeType.REMOVE)
     private UserProfile userProfile;
 
@@ -49,10 +54,11 @@ public class User {
     private List<ScrapedInfo> scrapedInfo = new ArrayList<>();;
 
     @Builder
-    public User(String password, String email, ReceiveAds receiveAds) {
+    public User(String email, String password, ReceiveAds receiveAds, Type type) {
         this.email = email;
         this.password = password;
-        this.receiveAds = receiveAds;
+        this.receiveAds = receiveAds != null ? receiveAds : ReceiveAds.YES;
+        this.type = type != null ? type : Type.EMAIL;
     }
 
     public User update(String password, String email, ReceiveAds receiveAds) {
