@@ -27,27 +27,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF 비활성화 (REST API 환경)
-                .csrf(csrf -> csrf.disable())
-                // 세션 비활성화 (JWT 사용하기 때문)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 요청 권한 설정
+                .csrf(csrf -> csrf.disable()) // CSRF 비활성화
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
                 .authorizeHttpRequests(authorize -> authorize
-                        // 모든 사용자 접근 가능
-                        // Swagger 관련 경로 허용
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-resources/**",
-                                "/webjars/**",
-                                "/api/**",
-                                "/api/health"
-                        ).permitAll()
-                        // 모든 요청 허용
-                        .anyRequest().permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/api/health").permitAll() // /api/health 허용
+                        .anyRequest().authenticated()
                 )
-                // JWT 인증 필터 추가
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가
 
         return http.build();
     }
