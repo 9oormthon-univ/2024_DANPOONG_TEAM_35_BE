@@ -1,6 +1,7 @@
 package app.jasople.User.dto;
 
 import app.jasople.User.entity.enums.ReceiveAds;
+import app.jasople.User.entity.enums.Type;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class UserProfileDtoRes {
         private String email;
         private String nickName;
         private ReceiveAds receiveAds;
+        private Type type;
     }
 
     @Getter

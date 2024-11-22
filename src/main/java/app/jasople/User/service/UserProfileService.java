@@ -5,6 +5,7 @@ import app.jasople.User.converter.UserProfileConverter;
 import app.jasople.User.dto.UserProfileDtoRes;
 import app.jasople.User.entity.User;
 import app.jasople.User.entity.UserProfile;
+import app.jasople.User.entity.enums.Type;
 import app.jasople.User.repository.UserProfileRepository;
 import app.jasople.User.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -51,7 +52,12 @@ public class UserProfileService {
     }
 
     public ApiResponse<String> updatePassword(Long userId, UserProfileDtoRes.UserPasswordUpdate userPasswordUpdate) {
+
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
+
+        if(user.getType() == Type.KAKAO){
+            throw new IllegalArgumentException("카카오 로그인 유저입니다.");
+        }
 
         if (!passwordEncoder.matches(userPasswordUpdate.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
@@ -65,8 +71,12 @@ public class UserProfileService {
 
     public ApiResponse<String> deleteProfile(Long userId, UserProfileDtoRes.UserProfileDelete userProfileDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
-        UserProfile userProfile = userProfileRepository.findByUser(user).orElseThrow(() -> new IllegalArgumentException("해당 유저의 프로필이 없습니다."));
 
+        if(user.getType() == Type.KAKAO){
+            userRepository.delete(user);
+
+            return ApiResponse.onSuccess("성공입니다");
+        }
 
         if (!passwordEncoder.matches(userProfileDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");

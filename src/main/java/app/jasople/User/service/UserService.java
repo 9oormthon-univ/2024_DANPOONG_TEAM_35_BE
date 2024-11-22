@@ -1,10 +1,12 @@
 package app.jasople.User.service;
 
 import app.jasople.User.converter.UserConverter;
+import app.jasople.User.dto.KakaoUserInfoResponseDto;
 import app.jasople.User.dto.UserDtoReq;
 import app.jasople.User.dto.UserDtoRes;
 import app.jasople.User.entity.User;
 import app.jasople.User.entity.UserProfile;
+import app.jasople.User.entity.enums.Type;
 import app.jasople.User.repository.UserProfileRepository;
 import app.jasople.User.repository.UserRepository;
 import app.jasople.security.JwtTokenProvider;
@@ -56,6 +58,12 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
+        if(user.getType() == Type.KAKAO){
+            throw new IllegalArgumentException("카카오 로그인 유저입니다.");
+        }
+
+        UserProfile userProfile = userProfileRepository.findByUser(user).orElseThrow(() -> new IllegalArgumentException("해당 유저의 프로필이 없습니다."));
+
         String accessToken = jwtTokenProvider.createAccessToken(user.getId());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getId());
 
@@ -65,8 +73,44 @@ public class UserService {
         CookieUtil.deleteCookie(request, response, "refreshToken");
         CookieUtil.addCookie(response, "refreshToken", refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME_IN_COOKIE);
 
-        return UserConverter.signInRes(user, accessToken);
+        return UserConverter.signInRes(user, accessToken,userProfile.getNickName());
     }
 
 
+    public User kakaoSignup(KakaoUserInfoResponseDto userInfo) {
+
+        User user = userRepository.findByEmail(userInfo.getKakaoAccount().getEmail())
+                .orElseGet(() -> {
+                    User newUser = User.builder()
+                            .email(userInfo.getKakaoAccount().getEmail())
+                            .type(Type.KAKAO)
+                            .build();
+                    userRepository.save(newUser);
+                    return newUser;
+                });
+
+        UserProfile userProfile = UserProfile.builder()
+                .user(user)
+                .nickName(userInfo.getKakaoAccount().profile.getNickName())
+                .build();
+        userProfileRepository.save(userProfile);
+
+        return user;
+    }
+
+    public UserDtoRes.UserLoginRes kakaoLogin(HttpServletRequest request, HttpServletResponse response, User user) {
+
+        UserProfile userProfile = userProfileRepository.findByUser(user).orElseThrow(() -> new IllegalArgumentException("해당 유저의 프로필이 없습니다."));
+
+        String accessToken = jwtTokenProvider.createAccessToken(user.getId());
+        String refreshToken = jwtTokenProvider.createRefreshToken(user.getId());
+
+        log.info("login refresh token : {}", refreshToken);
+
+        // 쿠키 저장
+        CookieUtil.deleteCookie(request, response, "refreshToken");
+        CookieUtil.addCookie(response, "refreshToken", refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME_IN_COOKIE);
+
+        return UserConverter.signInRes(user, accessToken, userProfile.getNickName());
+    }
 }

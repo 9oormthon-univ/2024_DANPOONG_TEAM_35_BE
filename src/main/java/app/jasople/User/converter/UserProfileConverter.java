@@ -13,6 +13,7 @@ public class UserProfileConverter {
                 .email(user.getEmail())
                 .receiveAds(user.getReceiveAds())
                 .nickName(userProfile.getNickName())
+                .type(userProfile.getUser().getType())
                 .build();
 
     }
