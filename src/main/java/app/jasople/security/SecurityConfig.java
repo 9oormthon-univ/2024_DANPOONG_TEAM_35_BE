@@ -40,7 +40,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/api/**"
+                                "/api/**",
+                                "/api/health"
                         ).permitAll()
                         // 모든 요청 허용
                         .anyRequest().permitAll()
