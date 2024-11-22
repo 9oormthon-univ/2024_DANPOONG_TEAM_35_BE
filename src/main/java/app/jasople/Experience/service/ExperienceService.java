@@ -10,6 +10,7 @@ import app.jasople.Experience.entity.ExperienceRepository;
 import app.jasople.Keywords.entity.ExperienceKeywords;
 import app.jasople.Keywords.entity.Keywords;
 import app.jasople.Keywords.entity.KeywordsRepository;
+import app.jasople.User.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,10 +34,10 @@ public class ExperienceService {
     private final KeywordsRepository keywordsRepository;
 
     @Transactional
-    public ExperienceResponseDto save(ExperienceSaveRequestDto requestDto) {
+    public ExperienceResponseDto save(ExperienceSaveRequestDto requestDto, User user) {
         Category category = categoryRepository.findById(requestDto.getCategoryId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Experience savedExperience = experienceRepository.save(requestDto.ToEntity(category));
+        Experience savedExperience = experienceRepository.save(requestDto.ToEntity(category,user));
 
         // 키워드 ID 리스트를 통해 Keyword 엔티티를 찾고 ExperienceKeyword 저장
         List<Long> keywordList = requestDto.getKeywordList();
@@ -55,10 +57,11 @@ public class ExperienceService {
     }
 
     @Transactional
-    public ExperienceResponseDto findById(Long id) {
+    public ExperienceResponseDto findById(Long id,User user) {
+
         // 경험 엔티티 찾기
-        Experience experience = experienceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid experience ID"));
+        Experience experience = experienceRepository.findByUserAndId(user,id)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 id입니다. "));
 
         // 연결된 키워드 리스트 가져오기
         List<Keywords> keywords = exKeywordsRepository.findByExperience(experience)
@@ -74,11 +77,10 @@ public class ExperienceService {
     }
 
     @Transactional
-    public List<ExperienceResponseDto> findList() {
-        // 모든 경험 엔티티 찾기
-        List<Experience> experiences = experienceRepository.findAll();
+    public List<ExperienceResponseDto> findList(User user) {
+        // 사용자가 작성한 모든 경험 엔티티 찾기
+        Optional<Experience> experiences = experienceRepository.findByUser(user);
 
-        // 각 경험에 대해 ExperienceResponseDto 생성
         return experiences.stream()
                 .map(experience -> {
                     // 연결된 키워드 리스트 가져오기
@@ -96,9 +98,5 @@ public class ExperienceService {
                 .collect(Collectors.toList());
     }
 
-
-    // 추후 구현
-    // 경험 삭제
-    // 경험 수정
 
 }

@@ -61,7 +61,7 @@ public class Experience {
     private LocalDate endDate;
 
     @Builder
-    public Experience(Category category,String title, String background, String solution, String result, Timestamp createdDate, LocalDate startDate, LocalDate endDate) {
+    public Experience(Category category,String title, String background, String solution, String result, Timestamp createdDate, LocalDate startDate, LocalDate endDate, User user) {
         this.title = title;
         this.background = background;
         this.solution = solution;
@@ -70,6 +70,7 @@ public class Experience {
         this.startDate = startDate;
         this.endDate = endDate;
         this.category = category;
+        this.user = user;
     }
 
 
