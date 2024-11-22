@@ -23,9 +23,13 @@ public class Keywords {
     @OneToOne(mappedBy = "keyword")
     private ExperienceKeywords experienceKeywords;
 
-    public Keywords(Long id, String name) {
+    @Enumerated(EnumType.STRING)
+    private keywordType keywordType;
+
+    public Keywords(Long id, String name,keywordType keywordType) {
         this.id = id;
         this.name = name;
+        this.keywordType = keywordType;
     }
 
 }

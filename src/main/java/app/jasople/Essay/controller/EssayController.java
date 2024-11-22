@@ -23,8 +23,8 @@ public class EssayController {
     private final gptServiceImpl gptService;
 
 
-    @Operation(summary = "관심 직무 등록", description = "사용자의 관심 직무 및 회사를 등록합니다.")
-    @PostMapping("/register-job")
+    @Operation(summary = "관심 직무 및 회사 등록", description = "사용자의 관심 직무 및 회사를 등록합니다.")
+    @PostMapping("/register-job-company")
     public ApiResponse<String> registerJob(@RequestBody EssayInfoRequestDto requestDto, @AuthenticationPrincipal CustomUserDetail userDetail) {
         User user = userDetail.getUser();
         gptService.registerJob(requestDto, user);
