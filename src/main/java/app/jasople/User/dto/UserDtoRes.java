@@ -15,6 +15,7 @@ public class UserDtoRes {
         private Long id;
         private String email;
         private String accessToken;
+        private String nickName;
     }
 
 }

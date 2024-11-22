@@ -1,7 +1,12 @@
 package app.jasople.User.controller;
 
+import app.jasople.Config.ApiResponse;
 import app.jasople.User.dto.KakaoUserInfoResponseDto;
+import app.jasople.User.dto.UserDtoRes;
 import app.jasople.User.service.KakaoService;
+import app.jasople.User.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,12 +25,15 @@ import java.io.IOException;
 public class KakaoLoginController {
 
     private final KakaoService kakaoService;
+    private final UserService userService;
 
     @GetMapping("/callback")
-    public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
+    public ApiResponse<UserDtoRes.UserLoginRes> callback(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String accessToken = kakaoService.getAccessTokenFromKakao(code);
 
         KakaoUserInfoResponseDto userInfo = kakaoService.getUserInfo(accessToken);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        //회원가입, 로그인 동시진행
+        return ApiResponse.onSuccess(userService.kakaoLogin(request,response, userService.kakaoSignup(userInfo)));
     }
 }
