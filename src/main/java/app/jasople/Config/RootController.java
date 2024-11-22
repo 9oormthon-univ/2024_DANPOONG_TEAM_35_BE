@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RootController {
 
     // 빈스톡 health check endpoint
-    @GetMapping("/api/health")
+    @GetMapping("/health")
     public String healthCheck() {
         return "ok";
     }
