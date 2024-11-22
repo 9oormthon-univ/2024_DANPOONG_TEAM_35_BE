@@ -1,1 +1,1 @@
-jweb: appstart
+web: appstart
