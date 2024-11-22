@@ -3,12 +3,15 @@ name: jasople CD/CD
 on:
   pull_request:
     types: [closed]
+  push:
+    branches:
+     - ci/1 # dev 브랜치로 푸시될 때 실행
   workflow_dispatch: # (2).수동 실행도 가능하도록
 
 jobs:
   build:
     runs-on: ubuntu-latest # (3).OS환경
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'ci/1'
 
     steps:
       - name: Checkout
