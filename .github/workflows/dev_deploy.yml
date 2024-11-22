@@ -28,18 +28,18 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
-        shell: bash # (7).build 시작
+        shell: bash
 
       - name: Get current time
         uses: 1466587594/get-current-time@v2
         id: current-time
         with:
           format: YYYY-MM-DDTHH-mm-ss
-          utcOffset: "+09:00" # (8).build 시점의 시간확보
+          utcOffset: "+09:00"
 
       - name: Show Current Time
-        run: echo "CurrentTime=$"
-        shell: bash # (9).확보한 시간 보여주기
+        run: echo "CurrentTime=${{ steps.current-time.outputs.formattedTime }}"
+        shell: bash
 
       - name: Generate deployment package
         run: |
@@ -60,4 +60,4 @@ jobs:
           version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
-          wait_for_deployment: false
+          wait_for_deployment: true # 배포 완료까지 기다리도록 설정
