@@ -1,6 +1,7 @@
 package app.jasople.Essay.service.Impl;
 
 import app.jasople.Essay.dto.*;
+import app.jasople.Essay.entity.Essay;
 import app.jasople.Essay.entity.EssayRepository;
 import app.jasople.Essay.service.gptService;
 import app.jasople.Experience.entity.ExperienceRepository;
@@ -179,6 +180,23 @@ public class gptServiceImpl implements gptService {
         EssaySaveRequestDto saveRequestDto = new EssaySaveRequestDto(requestDto.getTitle(), combinedContent.toString().trim());
         essayRepository.save(saveRequestDto.toEntity(user));
         return responseDtos;
+    }
+
+    // 자소서 리스트 조회
+    @Transactional
+    public List<EssayViewResponseDto> getEssayList(User user) {
+        List<Essay> essays = essayRepository.findByUser(user);
+        return essays.stream()
+                .map(essay -> new EssayViewResponseDto(essay))
+                .collect(Collectors.toList());
+    }
+
+    // 자소서 개별 조회
+    @Transactional
+    public EssayViewResponseDto getEssayById(Long id, User user) {
+        Essay essay = (Essay) essayRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 자소서 ID이거나 해당 사용자에게 권한이 없습니다."));
+        return new EssayViewResponseDto(essay);
     }
 
 

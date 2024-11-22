@@ -1,5 +1,6 @@
 package app.jasople.Essay.dto;
 
+import app.jasople.Essay.entity.Essay;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +17,10 @@ public class EssayViewResponseDto {
     private Timestamp createdDate;
 
     @Builder
-    public EssayViewResponseDto(Long id, String content, Timestamp createdDate) {
-        this.id = id;
-        this.content = content;
-        this.createdDate = createdDate;
+    public EssayViewResponseDto(Essay essay) {
+        this.id = essay.getId();
+        this.content = essay.getContent();
+        this.createdDate = essay.getCreatedDate();
     }
 
 }
