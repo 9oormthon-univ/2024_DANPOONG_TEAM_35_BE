@@ -61,13 +61,12 @@ public class ExperienceService {
 
         return new ExperienceResponseDto(savedExperience,keywords);
     }
-
     @Transactional
-    public ExperienceResponseDto findById(Long id,User user) {
+    public ExperienceResponseDto findById(Long id, User user) {
 
         // 경험 엔티티 찾기
-        Experience experience = experienceRepository.findByUserAndId(user,id)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 id입니다. "));
+        Experience experience = experienceRepository.findByUserAndId(user, id)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 id입니다."));
 
         // 연결된 키워드 리스트 가져오기
         List<Keywords> keywords = exKeywordsRepository.findByExperience(experience)
@@ -103,6 +102,7 @@ public class ExperienceService {
                 })
                 .collect(Collectors.toList());
     }
+
 
     @Transactional
     public void delete(CustomUserDetail userDetail, Long id) {
