@@ -182,12 +182,12 @@ public class gptServiceImpl implements gptService {
                 String content = jsonNode.path("choices").get(0).path("message").path("content").asText();
 
                 combinedContent.append(content).append(" ");
-                        responseDtos.add(new EssayResponseDto(item.getNumber(), content));
+                responseDtos.add(new EssayResponseDto(item.getNumber(), content));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }
-        EssaySaveRequestDto saveRequestDto = new EssaySaveRequestDto(requestDto.getEssayWriteItems().get(0).getTitle(), combinedContent.toString().trim());
+        EssaySaveRequestDto saveRequestDto = new EssaySaveRequestDto(requestDto.getTitle(),combinedContent.toString().trim());
         essayRepository.save(saveRequestDto.toEntity(user));
         return responseDtos;
     }

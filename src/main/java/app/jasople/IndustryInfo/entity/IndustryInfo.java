@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -22,8 +23,8 @@ public class IndustryInfo {
 
     private String content;
 
-    @OneToMany(mappedBy = "industryInfo")
-    private ScrapedInfo scrapedInfo;
+    @OneToMany(mappedBy = "industryInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ScrapedInfo> scrapedInfos = new ArrayList<>();
 
     private String category;
 
