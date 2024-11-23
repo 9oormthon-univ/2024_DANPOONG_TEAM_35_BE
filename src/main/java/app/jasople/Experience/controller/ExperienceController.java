@@ -40,7 +40,4 @@ public class ExperienceController {
         return ApiResponse.onSuccess(experiences);
     }
 
-    // 경험시트 삭제
-
-
 }
