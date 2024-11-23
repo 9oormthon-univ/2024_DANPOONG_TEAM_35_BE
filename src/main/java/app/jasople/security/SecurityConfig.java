@@ -86,14 +86,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         // 허용할 Origin 도메인 설정
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000", // React 개발 서버
-<<<<<<< HEAD
+                "http://localhost:3000",
                 "http://jasople.life" // 추가 도메인
                 ,"http://localhost:5173"
-
-=======
-                "http://yourdomain.com" // 추가 도메인
->>>>>>> dev
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
