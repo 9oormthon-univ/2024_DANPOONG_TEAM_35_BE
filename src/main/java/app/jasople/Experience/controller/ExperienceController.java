@@ -41,10 +41,10 @@ public class ExperienceController {
     }
 
     // 경험시트 삭제
-    @Operation(summary = "경험시트 삭제 API", description = "모든 경험시트 리스트를 조회합니다.")
-    @DeleteMapping("/delete")
-    public ApiResponse<String> delete(@AuthenticationPrincipal CustomUserDetail userDetail, @PathVariable Long id){
-        experienceService.delete(userDetail, id);
-    }
+//    @Operation(summary = "경험시트 삭제 API", description = "모든 경험시트 리스트를 조회합니다.")
+//    @DeleteMapping("/delete")
+//    public ApiResponse<String> delete(@AuthenticationPrincipal CustomUserDetail userDetail, @PathVariable Long id){
+//        experienceService.delete(userDetail, id);
+//    }
 
 }
