@@ -1,6 +1,7 @@
 package app.jasople.Keywords.entity;
 
 import app.jasople.IndustryInfo.entity.IndustryInfo;
+import app.jasople.IndustryInfo.entity.ScrapedInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +14,12 @@ public class InfoKeywords {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "IndustryInfo_id")
-    private IndustryInfo industryInfo;
+    @ManyToOne
+    @JoinColumn(name = "scrapedInfo_id")
+    private ScrapedInfo scrapedInfo;
 
     @OneToOne
     @JoinColumn(name = "Keywords_id")
     private Keywords keyword;
+
 }
