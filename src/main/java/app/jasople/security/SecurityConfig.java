@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/health", "/api/**").permitAll() // /api/health 허용
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/health", "/api/**" , "/callback").permitAll() // /api/health 허용
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가
