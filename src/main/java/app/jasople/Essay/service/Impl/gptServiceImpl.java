@@ -217,9 +217,22 @@ public class gptServiceImpl implements gptService {
     }
 
     // 자소서 수정
+    @Transactional
+    public void updateEssayById(Long id, User user, EssayUpdateRequestDto requestDto) {
+        Essay essay = essayRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("유효하지 않은 자소서 ID이거나 해당 사용자에게 권한이 없습니다."));
+        essay.update(requestDto.getTitle(), requestDto.getContent());
 
+    }
 
     // 자소서 삭제
+    @Transactional
+    public void deleteEssayById(Long id){
+        Essay essay = essayRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 자소서 ID이거나 해당 사용자에게 권한이 없습니다."));
+        essayRepository.delete(essay);
+
+    }
 
 
 }
