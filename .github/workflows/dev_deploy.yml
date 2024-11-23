@@ -5,7 +5,7 @@ on:
     types: [closed]
   push:
     branches:
-      - ci/1
+      - dev
   workflow_dispatch:
 
 jobs:
@@ -55,9 +55,9 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
-          application_name: breifing-dev
-          environment_name: Breifing-dev-env
+          application_name: hoyaBean
+          environment_name: HoyaBean-env
           version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
-          region: ap-northeast-1
+          region: ap-northeast-2
           deployment_package: deploy/deploy.zip
-          wait_for_deployment: false
+          wait_for_deployment: true # 배포 완료까지 기다리도록 설정
