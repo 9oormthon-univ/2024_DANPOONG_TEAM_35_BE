@@ -18,7 +18,7 @@ public class InfoKeywords {
     @JoinColumn(name = "scrapedInfo_id")
     private ScrapedInfo scrapedInfo;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "keyword_id")
     private Keywords keyword;
 
