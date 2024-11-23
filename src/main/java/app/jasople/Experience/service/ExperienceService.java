@@ -2,6 +2,11 @@ package app.jasople.Experience.service;
 
 import app.jasople.Category.entity.Category;
 import app.jasople.Category.entity.CategoryRepository;
+import app.jasople.Config.ApiResponse;
+import app.jasople.Config.Exception.handler.ExperienceHandler;
+import app.jasople.Experience.converter.ExKeywordConverter;
+import app.jasople.Experience.converter.ExperienceConverter;
+import app.jasople.Experience.dto.ExseetUpdateDto;
 import app.jasople.Keywords.entity.ExKeywordsRepository;
 import app.jasople.Experience.dto.ExperienceResponseDto;
 import app.jasople.Experience.dto.ExperienceSaveRequestDto;
@@ -99,10 +104,36 @@ public class ExperienceService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void delete(CustomUserDetail userDetail, Long id) {
 
+        Experience experience = experienceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 id입니다."));
 
+        int i = exKeywordsRepository.deleteByExperience(experience);
 
-        experienceRepository.deleteById(id);
+        experienceRepository.delete(experience);
+
+    }
+
+    @Transactional
+    public void update(CustomUserDetail userDetail, ExseetUpdateDto dto) {
+
+        //경험시트 조회
+        Experience ex = experienceRepository.findById(dto.getExperienceId()).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 경험시트입니다."));
+
+        //키워드 삭제 후 재등록
+        exKeywordsRepository.deleteAllByExperience(ex);
+        //키워드 등록
+        long count = dto.getKeywordList().stream()
+                        .map(id -> exKeywordsRepository.save(
+                                ExKeywordConverter.toEntity(ex,
+                                        keywordsRepository.findById(id).orElseThrow(()
+                                        -> new IllegalArgumentException("유효하지 않은 경험시트입니다."))))
+                            )
+                        .count();
+
+        Experience updatedExperience = ExperienceConverter.toEntity(dto); // DTO를 엔티티로 변환
+        experienceRepository.save(updatedExperience);
+
     }
 }

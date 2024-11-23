@@ -1,5 +1,6 @@
 package app.jasople.Essay.service.Impl;
 
+import app.jasople.Category.entity.Category;
 import app.jasople.Essay.dto.*;
 import app.jasople.Essay.entity.Essay;
 import app.jasople.Essay.entity.EssayRepository;
@@ -92,7 +93,7 @@ public class gptServiceImpl implements gptService {
                         .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 경험 ID입니다: " + id)))
                 .map(experience -> String.format("경험제목: %s, 문제 상황: %s, 해결 방법: %s, 결과: %s, 카테고리: %s, 기간: %s ~ %s",
                         experience.getTitle(), experience.getBackground(), experience.getSolution(), experience.getResult(),
-                        experience.getCategory().getName(), experience.getStartDate(), experience.getEndDate()))
+                        experience.getCategory(), experience.getStartDate(), experience.getEndDate()))
                 .collect(Collectors.joining("\n"));
 
         // 업계 소식 정보 생성

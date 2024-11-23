@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -20,8 +22,8 @@ public class Keywords {
     @OneToOne(mappedBy = "keyword")
     private InfoKeywords infoKeywords;
 
-    @OneToOne(mappedBy = "keyword")
-    private ExperienceKeywords experienceKeywords;
+    @OneToMany(mappedBy = "keyword")
+    private List<ExperienceKeywords> experienceKeywords;
 
     @Enumerated(EnumType.STRING)
     private keywordType keywordType;
