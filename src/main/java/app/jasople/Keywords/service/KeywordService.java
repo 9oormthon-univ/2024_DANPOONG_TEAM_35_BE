@@ -1,7 +1,5 @@
 package app.jasople.Keywords.service;
 
-import app.jasople.Experience.entity.ExperienceRepository;
-import app.jasople.IndustryInfo.entity.IndustryInfoRepository;
 import app.jasople.Keywords.dto.KeywordFilterResponseDto;
 import app.jasople.Keywords.dto.KeywordResponseDto;
 import app.jasople.Keywords.entity.*;
