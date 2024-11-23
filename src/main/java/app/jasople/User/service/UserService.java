@@ -78,24 +78,24 @@ public class UserService {
 
 
     public User kakaoSignup(KakaoUserInfoResponseDto userInfo) {
-
-        User user = userRepository.findByEmail(userInfo.getKakaoAccount().getEmail())
+        //이미 회원가입한 이메일이 있다면 user 리턴
+        //회원가입된게 없다면 회원가입 및 유저프로필 생성 후 유저 리턴
+        return userRepository.findByEmail(userInfo.getKakaoAccount().getEmail())
                 .orElseGet(() -> {
                     User newUser = User.builder()
                             .email(userInfo.getKakaoAccount().getEmail())
                             .type(Type.KAKAO)
                             .build();
                     userRepository.save(newUser);
+
+                    UserProfile userProfile = UserProfile.builder()
+                            .user(newUser)
+                            .nickName(userInfo.getKakaoAccount().profile.getNickName())
+                            .build();
+                    userProfileRepository.save(userProfile);
+
                     return newUser;
                 });
-
-        UserProfile userProfile = UserProfile.builder()
-                .user(user)
-                .nickName(userInfo.getKakaoAccount().profile.getNickName())
-                .build();
-        userProfileRepository.save(userProfile);
-
-        return user;
     }
 
     public UserDtoRes.UserLoginRes kakaoLogin(HttpServletRequest request, HttpServletResponse response, User user) {
