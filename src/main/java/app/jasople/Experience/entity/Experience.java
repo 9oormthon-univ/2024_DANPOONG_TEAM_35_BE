@@ -24,7 +24,7 @@ public class Experience {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false) // 외래 키 설정
     private Category category;
 
     @ManyToOne

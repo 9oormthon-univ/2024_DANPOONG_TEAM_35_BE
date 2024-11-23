@@ -2,6 +2,7 @@ package app.jasople.Experience.controller;
 import app.jasople.Config.ApiResponse;
 import app.jasople.Experience.dto.ExperienceResponseDto;
 import app.jasople.Experience.dto.ExperienceSaveRequestDto;
+import app.jasople.Experience.dto.ExseetUpdateDto;
 import app.jasople.Experience.service.ExperienceService;
 import app.jasople.security.CustomUserDetail;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,10 +42,23 @@ public class ExperienceController {
     }
 
     // 경험시트 삭제
-//    @Operation(summary = "경험시트 삭제 API", description = "모든 경험시트 리스트를 조회합니다.")
-//    @DeleteMapping("/delete")
-//    public ApiResponse<String> delete(@AuthenticationPrincipal CustomUserDetail userDetail, @PathVariable Long id){
-//        experienceService.delete(userDetail, id);
-//    }
+    @Operation(summary = "경험시트 삭제 API", description = "선택한 경험시트를 삭제합니다..")
+    @DeleteMapping("/delete/{id}")
+    public ApiResponse<String> delete(@AuthenticationPrincipal CustomUserDetail userDetail, @PathVariable Long id){
+        experienceService.delete(userDetail, id);
+
+        return ApiResponse.onSuccess("삭제되었습니다.");
+    }
+
+    @Operation(summary = "경험시트 수정 API", description = "경험시트를 수정합니다.")
+    @PatchMapping("/patch")
+    public ApiResponse<String> patch(@AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody ExseetUpdateDto dto){
+        experienceService.update(userDetail, dto);
+
+        return ApiResponse.onSuccess("수정되었습니다.");
+    }
+
+    //
+
 
 }
