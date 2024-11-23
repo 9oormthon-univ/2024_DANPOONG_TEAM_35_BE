@@ -60,6 +60,15 @@ public class Experience {
     @Column(nullable = false)
     private boolean deleted = false;
 
+    public void update(String title, String background, String solution, String result, LocalDate startDate, LocalDate endDate) {
+        this.title = title;
+        this.background = background;
+        this.solution = solution;
+        this.result = result;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     @Builder
     public Experience(Category category,String title, String background, String solution, String result, Timestamp createdDate, LocalDate startDate, LocalDate endDate, User user) {
         this.title = title;
