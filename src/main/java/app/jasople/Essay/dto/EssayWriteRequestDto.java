@@ -11,13 +11,14 @@ import java.util.List;
 @NoArgsConstructor
 public class EssayWriteRequestDto {
 
-    private int number;
+    private List<EssayWriteItemDto> essayWriteItems;
 
-    private String title;
-
-    private List<Long> experienceList;
-
-    private List<Long> infoList;
-
-
+    @Getter
+    @NoArgsConstructor
+    public static class EssayWriteItemDto {
+        private int number;
+        private String title;
+        private List<Long> experienceList;
+        private List<Long> infoList;
+    }
 }
