@@ -99,10 +99,4 @@ public class ExperienceService {
                 .collect(Collectors.toList());
     }
 
-    public void delete(CustomUserDetail userDetail, Long id) {
-
-
-
-        experienceRepository.deleteById(id);
-    }
 }

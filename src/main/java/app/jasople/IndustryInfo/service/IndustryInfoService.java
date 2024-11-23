@@ -2,6 +2,7 @@ package app.jasople.IndustryInfo.service;
 
 import app.jasople.IndustryInfo.dto.IndustryInfoResponseDto;
 import app.jasople.IndustryInfo.dto.IndustryInfoScrapDto;
+import app.jasople.IndustryInfo.dto.IndustryInfoScrapResponseDto;
 import app.jasople.IndustryInfo.entity.IndustryInfo;
 import app.jasople.IndustryInfo.entity.IndustryInfoRepository;
 import app.jasople.IndustryInfo.entity.ScrapedInfo;
@@ -9,6 +10,7 @@ import app.jasople.IndustryInfo.entity.ScrapedInfoRepository;
 import app.jasople.Keywords.entity.InfoKeywords;
 
 import app.jasople.Keywords.entity.InfoKeywordsRepository;
+import app.jasople.Keywords.entity.Keywords;
 import app.jasople.User.entity.User;
 import app.jasople.User.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -62,12 +64,24 @@ public class IndustryInfoService {
 
     // 스크랩한 항목 조회
     @Transactional
-    public List<IndustryInfoResponseDto> findScrapedByUser(User user) {
+    public List<IndustryInfoScrapResponseDto> findScrapedByUser(User user) {
+        // 유저의 스크랩한 항목 리스트 가져오기
         List<ScrapedInfo> scrapedInfoList = scrapedInfoRepository.findByUser(user);
+
         return scrapedInfoList.stream()
-                .map(scrap -> new IndustryInfoResponseDto(scrap.getIndustryInfo()))
+                .map(scrap -> {
+                    // 각 스크랩에 연결된 키워드 리스트 가져오기
+                    List<Keywords> keywords = infoKeywordsRepository.findByScrapedInfo(scrap)
+                            .stream()
+                            .map(InfoKeywords::getKeyword)
+                            .collect(Collectors.toList());
+
+                    // IndustryInfoScrapResponseDto 생성
+                    return new IndustryInfoScrapResponseDto(scrap, keywords);
+                })
                 .collect(Collectors.toList());
     }
+
 
     // 목록에서 검색 기능
     @Transactional
