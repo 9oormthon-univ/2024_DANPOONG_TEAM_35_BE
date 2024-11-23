@@ -19,7 +19,8 @@ public class Keywords {
 
     private String name; //키워드명
 
-    @OneToOne(mappedBy = "keyword")
+    @ManyToOne
+    @JoinColumn(name = "info_keywords")
     private InfoKeywords infoKeywords;
 
     @OneToMany(mappedBy = "keyword")

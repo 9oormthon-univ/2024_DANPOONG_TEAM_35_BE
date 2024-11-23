@@ -26,8 +26,7 @@ public class ScrapedInfo {
     @JoinColumn(name = "industryinfo_id", nullable = false) // 외래 키 이름
     private IndustryInfo industryInfo;
 
-    @OneToMany
-    @JoinColumn(name = "keyword_id")
+    @OneToMany(mappedBy = "scrapedInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InfoKeywords> keywords;
 
     @Builder
@@ -36,6 +35,5 @@ public class ScrapedInfo {
         this.industryInfo = industryInfo;
         this.keywords = keywords;
     }
-
 
 }
