@@ -2,15 +2,12 @@ package app.jasople.Keywords.service;
 
 import app.jasople.Experience.entity.Experience;
 import app.jasople.Experience.entity.ExperienceRepository;
-import app.jasople.IndustryInfo.entity.IndustryInfo;
-import app.jasople.IndustryInfo.entity.IndustryInfoRepository;
 import app.jasople.IndustryInfo.entity.ScrapedInfo;
 import app.jasople.IndustryInfo.entity.ScrapedInfoRepository;
 import app.jasople.Keywords.dto.KeywordFilterResponseDto;
 import app.jasople.Keywords.dto.KeywordResponseDto;
 import app.jasople.Keywords.entity.*;
 import app.jasople.User.entity.User;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

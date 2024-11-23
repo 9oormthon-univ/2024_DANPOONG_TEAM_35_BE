@@ -40,4 +40,9 @@ public class Essay {
         this.createdDate = createdDate;
     }
 
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
 }

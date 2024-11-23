@@ -72,5 +72,19 @@ public class EssayController {
         return ApiResponse.onSuccess(essayInfo);
     }
 
+    @Operation(summary = "자소서 삭제", description = "자소서를 id로 삭제합니다.")
+    @DeleteMapping("/delete/{id}")
+    public ApiResponse<String> deleteEssayById(@PathVariable Long id) {
+        gptService.deleteEssayById(id);
+        return ApiResponse.onSuccess("성공적으로 삭제되었습니다.");
+    }
+
+    @Operation(summary = "자소서 수정", description = "자소서를 id로 수정합니다.")
+    @PatchMapping("/update/{id}")
+    public ApiResponse<String> updateEssayById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetail userDetail, @RequestBody EssayUpdateRequestDto requestDto ) {
+        gptService.updateEssayById(id,userDetail.getUser(),requestDto);
+        return ApiResponse.onSuccess("성공적으로 삭제되었습니다.");
+    }
+
 
 }
