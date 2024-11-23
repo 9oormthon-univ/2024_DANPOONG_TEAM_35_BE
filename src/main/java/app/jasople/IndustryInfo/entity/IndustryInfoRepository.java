@@ -9,4 +9,5 @@ public interface IndustryInfoRepository extends JpaRepository<IndustryInfo,Long>
 
     List<IndustryInfo> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
 
+    boolean existsByTitle(String title);
 }
