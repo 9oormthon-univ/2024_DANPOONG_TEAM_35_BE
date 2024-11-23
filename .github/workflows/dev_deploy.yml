@@ -5,7 +5,7 @@ on:
     types: [closed]
   push:
     branches:
-      - ci/1
+      - dev
   workflow_dispatch:
 
 jobs:
