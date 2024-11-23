@@ -11,6 +11,7 @@ import app.jasople.Keywords.entity.ExperienceKeywords;
 import app.jasople.Keywords.entity.Keywords;
 import app.jasople.Keywords.entity.KeywordsRepository;
 import app.jasople.User.entity.User;
+import app.jasople.security.CustomUserDetail;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -98,6 +99,10 @@ public class ExperienceService {
                 .collect(Collectors.toList());
     }
 
+    public void delete(CustomUserDetail userDetail, Long id) {
 
 
+
+        experienceRepository.deleteById(id);
+    }
 }
