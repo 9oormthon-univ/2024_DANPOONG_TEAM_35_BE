@@ -1,6 +1,7 @@
 package app.jasople.IndustryInfo.dto;
 
 import app.jasople.IndustryInfo.entity.IndustryInfo;
+import app.jasople.Keywords.dto.KeywordResponseDto;
 import app.jasople.Keywords.entity.InfoKeywords;
 import app.jasople.Keywords.entity.Keywords;
 import lombok.Builder;
@@ -28,5 +29,6 @@ public class IndustryInfoResponseDto {
         this.title = industryInfo.getTitle();
         this.content = industryInfo.getContent();
         this.category = industryInfo.getCategory();
+
     }
 }
