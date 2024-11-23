@@ -7,4 +7,6 @@ import java.util.List;
 public interface KeywordsRepository extends JpaRepository<Keywords,Long> {
 
     List<Keywords> findByKeywordType(keywordType keywordType);
+
+    boolean existsByName(String name);
 }
