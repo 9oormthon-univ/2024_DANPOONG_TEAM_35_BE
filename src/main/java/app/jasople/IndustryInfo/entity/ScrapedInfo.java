@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public class ScrapedInfo {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "industry_info_id", nullable = false)
+    @JoinColumn(name = "industryinfo_id", nullable = false) // 외래 키 이름
     private IndustryInfo industryInfo;
 
     @OneToMany(mappedBy = "scrapedInfo", cascade = CascadeType.ALL, orphanRemoval = true)
