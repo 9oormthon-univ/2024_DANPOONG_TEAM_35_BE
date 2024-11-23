@@ -25,12 +25,11 @@ public class KakaoService {
     @Autowired
     public KakaoService(@Value("${kakao.client_id}") String clientId) {
         this.clientId = clientId;
-        KAUTH_TOKEN_URL_HOST ="https://kauth.kakao.com";
+        KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
         KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
     }
 
     public String getAccessTokenFromKakao(String code) {
-        WebClient webClient = WebClient.create(); // WebClient 인스턴스 생성
         KakaoTokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
@@ -40,6 +39,7 @@ public class KakaoService {
                         .queryParam("code", code)
                         .build(true))
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer ${code}")
                 .retrieve()
                 //TODO : Custom Exception
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
