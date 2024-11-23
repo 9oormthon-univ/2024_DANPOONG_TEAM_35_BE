@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExperienceRepository extends JpaRepository<Experience,Long> {
-    Optional<Experience> findByUser(User user);
+    List<Experience> findByUser(User user);
     Optional<Experience> findByUserAndId(User user,Long id);
 }
