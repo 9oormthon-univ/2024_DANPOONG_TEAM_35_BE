@@ -79,7 +79,7 @@ public class ExperienceService {
     @Transactional
     public List<ExperienceResponseDto> findList(User user) {
         // 사용자가 작성한 모든 경험 엔티티 찾기
-        Optional<Experience> experiences = experienceRepository.findByUser(user);
+        List<Experience> experiences = experienceRepository.findByUser(user);
 
         return experiences.stream()
                 .map(experience -> {
@@ -97,6 +97,7 @@ public class ExperienceService {
                 })
                 .collect(Collectors.toList());
     }
+
 
 
 }

@@ -29,8 +29,8 @@ public class Essay {
 
     @CreationTimestamp
     private Timestamp createdDate;
-
-
+    @Column(nullable = false)
+    private boolean deleted = false;
     @Builder
     public Essay(Long id, String title, String content, User user, Timestamp createdDate) {
         this.id = id;

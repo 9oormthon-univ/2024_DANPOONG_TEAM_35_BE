@@ -34,10 +34,13 @@ public class ExperienceController {
     }
 
     @Operation(summary = "경험시트 리스트 조회 API", description = "모든 경험시트 리스트를 조회합니다.")
-    @GetMapping("/view/all")
+    @GetMapping("/view/all       ")
     public ApiResponse<List<ExperienceResponseDto>> viewAll(@AuthenticationPrincipal CustomUserDetail userDetail) {
         List<ExperienceResponseDto> experiences = experienceService.findList(userDetail.getUser());
         return ApiResponse.onSuccess(experiences);
     }
+
+    // 경험시트 삭제
+
 
 }
