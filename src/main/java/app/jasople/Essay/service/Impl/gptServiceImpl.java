@@ -154,7 +154,6 @@ public class gptServiceImpl implements gptService {
         InterestedJob interestedJob = interestedJobRepository.save(requestDto.toEntity(user,job));
     }
 
-
     // 직무 리스트 반환
     @Transactional
     public List<JobResponseDto> getList() {
@@ -206,6 +205,13 @@ public class gptServiceImpl implements gptService {
         Essay essay = (Essay) essayRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 자소서 ID이거나 해당 사용자에게 권한이 없습니다."));
         return new EssayViewResponseDto(essay);
+    }
+
+    // 직무, 회사 조회
+    @Transactional
+    public EssayInfoResponseDto getJobCompanyInfo(User user) {
+        InterestedJob interestedJob = interestedJobRepository.findByUser(user);
+        return new EssayInfoResponseDto(interestedJob);
     }
 
 

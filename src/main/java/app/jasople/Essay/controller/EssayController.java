@@ -55,7 +55,6 @@ public class EssayController {
     }
 
 
-
     @Operation(summary = "자소서 개별 조회", description = "자소서를 ID로 조회합니다.")
     @GetMapping("/view/{id}")
     public ApiResponse<EssayViewResponseDto> getEssayById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetail userDetail) {
@@ -63,4 +62,14 @@ public class EssayController {
         EssayViewResponseDto essay = gptService.getEssayById(id, user);
         return ApiResponse.onSuccess(essay);
     }
+
+    @Operation(summary = "직무, 회사 조회", description = "입력한 직무, 회사를 조회합니다.")
+    @GetMapping("/view/job-company}")
+    public ApiResponse<EssayInfoResponseDto> getEssayInfo(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetail userDetail) {
+        User user = userDetail.getUser();
+        EssayInfoResponseDto essayInfo = gptService.getJobCompanyInfo(user);
+        return ApiResponse.onSuccess(essayInfo);
+    }
+
+
 }
