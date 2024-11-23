@@ -36,16 +36,14 @@ public class Experience {
 
     @Column(nullable = false)
     private String title;
-    @Lob
-    @Column(name = "background", length = 200)
+    @Column(name = "background", columnDefinition = "TEXT")
     private String background;
 
-    @Lob
-    @Column(name = "solution", length = 200)
+    @Column(name = "solution", columnDefinition = "TEXT")
     private String solution;
 
     @Lob
-    @Column(name = "result", length = 200)
+    @Column(name = "result", columnDefinition = "TEXT")
     private String result;
 
     @CreationTimestamp

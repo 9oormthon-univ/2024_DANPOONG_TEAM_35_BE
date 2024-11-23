@@ -20,7 +20,7 @@ public class Essay {
 
     private String title;
 
-    @Lob
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String content; //자기소개서 내용
 
     @ManyToOne
