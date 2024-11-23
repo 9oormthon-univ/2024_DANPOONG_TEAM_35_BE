@@ -1,7 +1,6 @@
 package app.jasople.Experience.entity;
 
 import app.jasople.Category.entity.Category;
-import app.jasople.Essay.entity.EssayFormat;
 import app.jasople.Keywords.entity.ExperienceKeywords;
 import app.jasople.User.entity.User;
 import jakarta.persistence.*;
@@ -32,12 +31,10 @@ public class Experience {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(mappedBy = "experience")
-    private EssayFormat essayFormat;
-
     @OneToMany(mappedBy = "experience")
     private List<ExperienceKeywords> experienceKeywords;
 
+    @Column(nullable = false)
     private String title;
     @Lob
     @Column(name = "background", length = 200)

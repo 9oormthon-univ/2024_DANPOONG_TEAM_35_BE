@@ -1,6 +1,7 @@
 package app.jasople.Job.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,10 +14,14 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String name; // 직무명
 
     @OneToOne(mappedBy = "job")
     private InterestedJob interestedJob;
+
+    @Builder
+    public Job(String name) {
+        this.name = name;
+    }
 
 }

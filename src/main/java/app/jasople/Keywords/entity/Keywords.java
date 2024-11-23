@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Keywords {
-    public Keywords(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +22,13 @@ public class Keywords {
 
     @OneToOne(mappedBy = "keyword")
     private ExperienceKeywords experienceKeywords;
+
+    @Enumerated(EnumType.STRING)
+    private keywordType keywordType;
+
+    public Keywords(String name,keywordType keywordType) {
+        this.name = name;
+        this.keywordType = keywordType;
+    }
 
 }
