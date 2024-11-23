@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@SQLDelete(sql = "UPDATE essay SET deleted = true WHERE id = ?")
 public class gptServiceImpl implements gptService {
     @Value("${openai.api.key}")
     private String apikey;
@@ -213,6 +215,11 @@ public class gptServiceImpl implements gptService {
         InterestedJob interestedJob = interestedJobRepository.findByUser(user);
         return new EssayInfoResponseDto(interestedJob);
     }
+
+    // 자소서 수정
+
+
+    // 자소서 삭제
 
 
 }

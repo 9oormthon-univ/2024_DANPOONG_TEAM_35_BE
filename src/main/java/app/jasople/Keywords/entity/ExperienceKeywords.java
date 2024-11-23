@@ -1,6 +1,7 @@
 package app.jasople.Keywords.entity;
 
 import app.jasople.Experience.entity.Experience;
+import app.jasople.User.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,9 +20,10 @@ public class ExperienceKeywords {
     @JoinColumn(name = "experience_id", nullable = false)
     private Experience experience;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "keyword_id",nullable = false)
     private Keywords keyword;
+
 
     @Builder
     public ExperienceKeywords(Experience experience, Keywords keyword) {

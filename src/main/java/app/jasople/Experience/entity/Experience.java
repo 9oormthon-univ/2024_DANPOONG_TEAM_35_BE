@@ -57,6 +57,9 @@ public class Experience {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     @Builder
     public Experience(Category category,String title, String background, String solution, String result, Timestamp createdDate, LocalDate startDate, LocalDate endDate, User user) {
         this.title = title;
