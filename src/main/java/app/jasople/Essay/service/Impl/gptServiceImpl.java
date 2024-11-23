@@ -105,7 +105,7 @@ public class gptServiceImpl implements gptService {
 
         // 키워드 정보 생성
         String keywords = keywordsRepository.findAll().isEmpty() ? "키워드 정보 없음" : keywordsRepository.findAll().stream()
-                .map(keyword -> "키워드: " + keyword.getInfoKeywords().getKeyword().getName())
+                .map(keyword -> "키워드: " + keyword.getInfoKeywords())
                 .collect(Collectors.joining(", "));
 
         // 관심 직무 정보 생성
