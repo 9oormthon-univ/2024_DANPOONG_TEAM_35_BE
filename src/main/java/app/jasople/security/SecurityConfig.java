@@ -20,7 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -33,10 +33,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
-                .cors(withDefaults()) // CORS 설정 추가
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 적용
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/health", "/api/**", "/callback").permitAll() // /api/health 허용
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**",
+                                "/swagger-resources/**", "/webjars/**", "/health", "/api/**", "/api/essay/**",
+                                "/callback").permitAll() // 공개 엔드포인트 설정
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -45,10 +47,12 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // JWT 필터 추가
                 .addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class); // 예외 핸들러 필터 추가
+
         return http.build();
     }
 
-    JwtAuthenticationFilter jwtAuthenticationFilter() {
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtTokenProvider);
     }
 
@@ -56,17 +60,21 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-    @Bean // 추가 빈으로 등록
-    public AccessDeniedHandler accessDeniedHandler(){
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
 
     @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint(){return new CustomAuthenticationEntryPoint();
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
     }
 
     @Bean
-    public ExceptionHandlerFilter exceptionHandlerFilter(){return new ExceptionHandlerFilter();}
+    public ExceptionHandlerFilter exceptionHandlerFilter() {
+        return new ExceptionHandlerFilter();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -76,10 +84,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOriginPattern("*"); // 모든 출처 허용 (필요시 특정 도메인으로 변경)
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
+        // 허용할 Origin 도메인 설정
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000", // React 개발 서버
+                "http://yourdomain.com" // 추가 도메인
+        ));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowCredentials(true); // 자격 증명 허용 (쿠키, 인증 정보 포함)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
