@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,11 +20,11 @@ public class Category {
 
     private String name;
 
-    @OneToMany(mappedBy = "category")
-    private List<Experience> experienceSheets;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true) // 양방향 관계 설정
+    private List<Experience> experiences = new ArrayList<>();
 
     @Builder
-    public Category(String name){
+    public Category(String name) {
         this.name = name;
     }
 
