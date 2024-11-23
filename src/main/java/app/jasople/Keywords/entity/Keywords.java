@@ -26,8 +26,7 @@ public class Keywords {
     @Enumerated(EnumType.STRING)
     private keywordType keywordType;
 
-    public Keywords(Long id, String name,keywordType keywordType) {
-        this.id = id;
+    public Keywords(String name,keywordType keywordType) {
         this.name = name;
         this.keywordType = keywordType;
     }

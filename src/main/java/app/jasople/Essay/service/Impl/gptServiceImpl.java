@@ -59,7 +59,7 @@ public class gptServiceImpl implements gptService {
         Map<String, String> assistantMessage = new HashMap<>();
         assistantMessage.put("role", "system");
         // 경험시트 카테고리 고려 추가하기
-        assistantMessage.put("content", "당신은 사용자가 요청한 정보를 기반으로 자기소개서를 작성하는 역할을 합니다. 사용자가 제공한 경험, 업계 소식, 키워드를 사용하여 각 문항에 맞는 답변을 생성해주세요.다음과 같은 규칙을 지켜주세요. 1. 글자수는 500자-700자 정도로 작성해줘.\n" +
+        assistantMessage.put("content", "당신은 사용자가 요청한 정보를 기반으로 자기소개서를 작성하는 역할을 합니다. 사용자가 제공한 경험, 업계 소식, 키워드를 사용하여 각 문항에 맞는 답변을 생성해주세요.다음과 같은 규칙을 지켜주세요. 1. 글자수를 지켜줘. \n" +
                 "2. 성과와 결과 제시: 자기소개서 구조에 먼저 집중해야해. 앞에 '성과'와 '결과'부터 제시하고, 그 '성과'와 '결과'를 만들어냈던 나의 '액션'과 '상황'을 서술시간 혹은 분량이 부족하다면 '성과'+결과를 이끌어냈던 나의 '액션' 작성해줘.\n" +
                 "3. 두괄식으로 작성하는 것이 중요하기 때문에 소제목을 무조건 작성해줘.\n" +
                 "4. 사용하지 말아야 할 표현들을 제외해줘: 줄임말보다는 본말을 사용하도록 해주고, 타고났다', '운이 좋아서 다행'이라는 표현은 지양약점을 밝히지 말도록 해줘. 무작정 '열심히 배우겠다'는 자세는 지양해줘.");
@@ -84,48 +84,58 @@ public class gptServiceImpl implements gptService {
 
     // 경험시트, 업계소식에서 프롬프트 생성
     public String generatePromptForQuestion(int questionNumber, List<Long> experienceIds, List<Long> industryInfoIds, User user) {
+        // 경험 정보 생성
         String experiences = experienceIds.stream()
                 .map(id -> experienceRepository.findById(id)
                         .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 경험 ID입니다: " + id)))
-                .map(experience -> "경험제목: " + experience.getTitle() + ", 문제 상황: " + experience.getBackground() + ", 해결 방법: " + experience.getSolution() + "결과: " + experience.getResult() + "카테고리: " + experience.getCategory().getName())
+                .map(experience -> String.format("경험제목: %s, 문제 상황: %s, 해결 방법: %s, 결과: %s, 카테고리: %s, 기간: %s ~ %s",
+                        experience.getTitle(), experience.getBackground(), experience.getSolution(), experience.getResult(),
+                        experience.getCategory().getName(), experience.getStartDate(), experience.getEndDate()))
                 .collect(Collectors.joining("\n"));
 
+        // 업계 소식 정보 생성
         String industryInfos = industryInfoIds.stream()
                 .map(id -> industryInfoRepository.findById(id)
                         .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 업계 소식 ID입니다: " + id)))
-                .map(info -> "업계 소식: " + info.getTitle() + ", 내용: " + info.getContent())
+                .map(info -> String.format("업계 소식: %s, 내용: %s", info.getTitle(), info.getContent()))
                 .collect(Collectors.joining("\n"));
 
+        // 키워드 정보 생성
         String keywords = keywordsRepository.findAll().stream()
                 .map(keyword -> "키워드: " + keyword.getInfoKeywords().getKeyword().getName())
                 .collect(Collectors.joining(", "));
 
+        // 관심 직무 정보 생성
         InterestedJob interestedJob = interestedJobRepository.findByUser(user);
         String jobInfoText = String.format("관심 직무는 %s 입니다. 지원하고자 하는 회사는 %s 입니다.", interestedJob.getJob().getName(), interestedJob.getCompany());
 
+        // 문항에 따른 프롬프트 생성
         String questionPrompt = "";
         switch (questionNumber) {
             case 1:
-                questionPrompt = "지원동기 및 포부: 지원동기와 입사 후 회사에서 이루고 싶은 꿈을 기술하십시오.";
+                questionPrompt = "지원동기 및 포부: 지원동기와 입사 후 회사에서 이루고 싶은 꿈을 기술하십시오. 300자 이내로 작성하되, 최소 70%는 넘겨야 합니다.";
                 break;
             case 2:
-                questionPrompt = "직무 역량: 해당 직무 분야에 지원하게 된 이유와 선택 직무에 본인이 적합하다고 판단할 수 있는 이유 및 근거를 제시해주십시오.";
+                questionPrompt = "직무 역량: 해당 직무 분야에 지원하게 된 이유와 선택 직무에 본인이 적합하다고 판단할 수 있는 이유 및 근거를 제시해주십시오. 600자 이내로 작성하되, 최소 70%는 넘겨야 합니다.";
                 break;
             case 3:
-                questionPrompt = "도전(성공/실패) : 학업 외 가장 열정적이고 도전적으로 몰입하여 성과를 창출했거나 목표를 달성한 경험을 기술하십시오.";
+                questionPrompt = "도전(성공/실패) : 학업 외 가장 열정적이고 도전적으로 몰입하여 성과를 창출했거나 목표를 달성한 경험을 기술하십시오. 600자 이내로 작성하되, 최소 70%는 넘겨야 합니다.";
                 break;
             case 4:
-                questionPrompt = "남들과 다른 새로운 관점으로 변화/혁신을 추구한 경험과 그를 통해 배운 점이 무엇인지 기술하십시오.";
+                questionPrompt = "남들과 다른 새로운 관점으로 변화/혁신을 추구한 경험과 그를 통해 배운 점이 무엇인지 기술하십시오. 600자 이내로 작성하되, 최소 70%는 넘겨야 합니다.";
                 break;
             case 5:
-                questionPrompt = "창의성(문제해결능력) : 공동의 목표를 달성하기 위해 타인과 협업했던 경험과 그 과정에서 본인이 수행한 역할, 그리고 그 해당 경험을 통해 얻은 것은 무엇인지 구체적으로 기술해 주십시오.";
+                questionPrompt = "창의성(문제해결능력) : 공동의 목표를 달성하기 위해 타인과 협업했던 경험과 그 과정에서 본인이 수행한 역할, 그리고 그 해당 경험을 통해 얻은 것은 무엇인지 구체적으로 기술해 주십시오. 400자 이내로 작성하되, 최소 70%는 넘겨야 합니다.";
                 break;
             default:
                 throw new IllegalArgumentException("유효하지 않은 문항 번호입니다: " + questionNumber);
         }
 
-        return String.format("%s\n%s\n경험: %s\n업계 소식: %s\n키워드: %s\n이 정보를 바탕으로 문항을 작성해주세요.", questionPrompt, jobInfoText, experiences, industryInfos, keywords);
+        // 최종 프롬프트 생성
+        return String.format("%s\n%s\n경험: %s\n업계 소식: %s\n키워드: %s\n이 정보를 바탕으로 문항을 작성해주세요.",
+                questionPrompt, jobInfoText, experiences, industryInfos, keywords);
     }
+
 
 
     // 관심 직무 정보, 회사를 가져와서 텍스트로 변경
@@ -176,7 +186,6 @@ public class gptServiceImpl implements gptService {
                 e.printStackTrace();
             }
         }
-
         EssaySaveRequestDto saveRequestDto = new EssaySaveRequestDto(requestDto.getTitle(), combinedContent.toString().trim());
         essayRepository.save(saveRequestDto.toEntity(user));
         return responseDtos;
