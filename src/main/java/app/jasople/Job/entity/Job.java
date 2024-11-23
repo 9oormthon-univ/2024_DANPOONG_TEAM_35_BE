@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -16,8 +18,8 @@ public class Job {
 
     private String name; // 직무명
 
-    @OneToOne(mappedBy = "job")
-    private InterestedJob interestedJob;
+    @OneToMany(mappedBy = "job")
+    private List<InterestedJob> interestedJobs;
 
     @Builder
     public Job(String name) {

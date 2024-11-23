@@ -22,12 +22,12 @@ public class InterestedJob {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "job_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "job_id")
     private Job job;
 
     private String company;

@@ -21,12 +21,11 @@ public class ScrapedInfo {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "industryinfo_id")
+    @ManyToOne
+    @JoinColumn(name = "industry_info_id", nullable = false)
     private IndustryInfo industryInfo;
 
-    @OneToMany
-    @JoinColumn(name = "keyword_id")
+    @OneToMany(mappedBy = "scrapedInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InfoKeywords> keywords;
 
     @Builder
@@ -35,6 +34,5 @@ public class ScrapedInfo {
         this.industryInfo = industryInfo;
         this.keywords = keywords;
     }
-
 
 }
