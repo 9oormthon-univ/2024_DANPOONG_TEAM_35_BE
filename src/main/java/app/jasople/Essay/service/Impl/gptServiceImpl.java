@@ -88,7 +88,7 @@ public class gptServiceImpl implements gptService {
     // 경험시트, 업계소식에서 프롬프트 생성
     public String generatePromptForQuestion(int questionNumber, List<Long> experienceIds, List<Long> industryInfoIds, User user) {
         // 경험 정보 생성
-        String experiences = experienceIds.stream()
+        String experiences = experienceIds == null || experienceIds.isEmpty() ? "경험 정보 없음" : experienceIds.stream()
                 .map(id -> experienceRepository.findById(id)
                         .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 경험 ID입니다: " + id)))
                 .map(experience -> String.format("경험제목: %s, 문제 상황: %s, 해결 방법: %s, 결과: %s, 카테고리: %s, 기간: %s ~ %s",
@@ -97,20 +97,20 @@ public class gptServiceImpl implements gptService {
                 .collect(Collectors.joining("\n"));
 
         // 업계 소식 정보 생성
-        String industryInfos = industryInfoIds.stream()
+        String industryInfos = industryInfoIds == null || industryInfoIds.isEmpty() ? "업계 소식 정보 없음" : industryInfoIds.stream()
                 .map(id -> industryInfoRepository.findById(id)
                         .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 업계 소식 ID입니다: " + id)))
                 .map(info -> String.format("업계 소식: %s, 내용: %s", info.getTitle(), info.getContent()))
                 .collect(Collectors.joining("\n"));
 
         // 키워드 정보 생성
-        String keywords = keywordsRepository.findAll().stream()
+        String keywords = keywordsRepository.findAll().isEmpty() ? "키워드 정보 없음" : keywordsRepository.findAll().stream()
                 .map(keyword -> "키워드: " + keyword.getInfoKeywords().getKeyword().getName())
                 .collect(Collectors.joining(", "));
 
         // 관심 직무 정보 생성
         InterestedJob interestedJob = interestedJobRepository.findByUser(user);
-        String jobInfoText = String.format("관심 직무는 %s 입니다. 지원하고자 하는 회사는 %s 입니다.", interestedJob.getJob().getName(), interestedJob.getCompany());
+        String jobInfoText = interestedJob == null ? "관심 직무 정보 없음" : String.format("관심 직무는 %s 입니다. 지원하고자 하는 회사는 %s 입니다.", interestedJob.getJob().getName(), interestedJob.getCompany());
 
         // 문항에 따른 프롬프트 생성
         String questionPrompt = "";
@@ -138,7 +138,6 @@ public class gptServiceImpl implements gptService {
         return String.format("%s\n%s\n경험: %s\n업계 소식: %s\n키워드: %s\n이 정보를 바탕으로 문항을 작성해주세요.",
                 questionPrompt, jobInfoText, experiences, industryInfos, keywords);
     }
-
 
 
     // 관심 직무 정보, 회사를 가져와서 텍스트로 변경
@@ -176,19 +175,19 @@ public class gptServiceImpl implements gptService {
         List<EssayResponseDto> responseDtos = new ArrayList<>();
         StringBuilder combinedContent = new StringBuilder();
 
-        for (int i = 1; i <= 5; i++) {
+        for (EssayWriteRequestDto.EssayWriteItemDto item : requestDto.getEssayWriteItems()) {
             try {
-                String prompt = generatePromptForQuestion(i, requestDto.getExperienceList(), requestDto.getInfoList(), user);
+                String prompt = generatePromptForQuestion(item.getNumber(), item.getExperienceList(), item.getInfoList(), user);
                 JsonNode jsonNode = callChatGpt(prompt);
                 String content = jsonNode.path("choices").get(0).path("message").path("content").asText();
 
-                combinedContent.append(content).append("\n");
-                responseDtos.add(new EssayResponseDto(i, content));
+                combinedContent.append(content).append(" ");
+                        responseDtos.add(new EssayResponseDto(item.getNumber(), content));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }
-        EssaySaveRequestDto saveRequestDto = new EssaySaveRequestDto(requestDto.getTitle(), combinedContent.toString().trim());
+        EssaySaveRequestDto saveRequestDto = new EssaySaveRequestDto(requestDto.getEssayWriteItems().get(0).getTitle(), combinedContent.toString().trim());
         essayRepository.save(saveRequestDto.toEntity(user));
         return responseDtos;
     }

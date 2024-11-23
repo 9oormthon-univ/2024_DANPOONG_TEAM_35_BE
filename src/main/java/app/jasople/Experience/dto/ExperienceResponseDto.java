@@ -2,6 +2,7 @@ package app.jasople.Experience.dto;
 
 import app.jasople.Category.entity.Category;
 import app.jasople.Experience.entity.Experience;
+import app.jasople.Keywords.dto.KeywordResponseDto;
 import app.jasople.Keywords.entity.Keywords;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class ExperienceResponseDto {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    private List<String> keywords;
+    private List<KeywordResponseDto> keywords;
 
     @Builder
     public ExperienceResponseDto(Experience experience, List<Keywords> keywords){
@@ -39,6 +40,8 @@ public class ExperienceResponseDto {
         this.result = experience.getResult();
         this.startDate = experience.getStartDate();
         this.endDate = experience.getEndDate();
-        this.keywords = keywords.stream().map(Keywords::getName).collect(Collectors.toList());
+        this.keywords = keywords.stream()
+                .map(keyword -> new KeywordResponseDto(keyword))
+                .collect(Collectors.toList());
     }
 }
