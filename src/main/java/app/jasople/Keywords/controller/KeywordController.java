@@ -47,7 +47,7 @@ public class KeywordController {
     }
 
     // 키워드 집계 - 업계소식
-    @GetMapping("/filter-experience")
+    @GetMapping("/filterinfo-experience")
     @Operation(summary = "업계소식 키워드 필터 API", description = "업계소식 키워드를 개수를 조회합니다.")
     public ApiResponse<List<KeywordFilterResponseDto>> filterInfoKeywords(@AuthenticationPrincipal CustomUserDetail userDetail) {
         List<KeywordFilterResponseDto> keywords = keywordService.filterKeywordsInInfo(userDetail.getUser());
