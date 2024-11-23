@@ -65,8 +65,8 @@ public class EssayController {
 
 
     @Operation(summary = "직무, 회사 조회", description = "입력한 직무, 회사를 조회합니다.")
-    @GetMapping("/view/job-company}")
-    public ApiResponse<EssayInfoResponseDto> getEssayInfo(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetail userDetail) {
+    @GetMapping("/view/job-company")
+    public ApiResponse<EssayInfoResponseDto> getEssayInfo(@AuthenticationPrincipal CustomUserDetail userDetail) {
         User user = userDetail.getUser();
         EssayInfoResponseDto essayInfo = gptService.getJobCompanyInfo(user);
         return ApiResponse.onSuccess(essayInfo);

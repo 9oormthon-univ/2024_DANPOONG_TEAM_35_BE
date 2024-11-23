@@ -9,5 +9,4 @@ public interface IndustryInfoRepository extends JpaRepository<IndustryInfo,Long>
 
     List<IndustryInfo> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
 
-    Optional<ScrapedInfo> findByUser(User user);
 }
