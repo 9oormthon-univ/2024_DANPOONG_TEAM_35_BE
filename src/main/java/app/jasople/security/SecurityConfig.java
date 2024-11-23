@@ -101,7 +101,6 @@ public class SecurityConfig {
         configuration.setAllowCredentials(true); // 자격 증명 허용 (쿠키, 인증 정보 포함)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        configuration.addAllowedHeader("Authorization");
         return source;
     }
 }
