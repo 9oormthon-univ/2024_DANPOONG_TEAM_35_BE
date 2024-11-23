@@ -22,9 +22,8 @@ public class IndustryInfo {
 
     private String content;
 
-    @OneToOne(mappedBy = "industryInfo")
+    @OneToMany(mappedBy = "industryInfo")
     private ScrapedInfo scrapedInfo;
-
 
     private String category;
 
