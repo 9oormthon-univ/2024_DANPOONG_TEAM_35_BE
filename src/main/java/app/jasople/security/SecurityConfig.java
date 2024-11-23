@@ -85,8 +85,6 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOriginPattern("*"); // 모든 출처 허용 (필요시 특정 도메인으로 변경)
-
-
         // 허용할 Origin 도메인 설정
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
@@ -95,13 +93,13 @@ public class SecurityConfig {
                 "https://jasople.life"
                 ,"http://localhost:5173"
                 ,"https://localhost:5173"
-
         ));
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true); // 자격 증명 허용 (쿠키, 인증 정보 포함)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+        configuration.addAllowedHeader("Authorization");
         return source;
     }
 }

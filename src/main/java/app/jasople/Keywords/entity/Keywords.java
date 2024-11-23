@@ -19,7 +19,7 @@ public class Keywords {
 
     private String name; //키워드명
 
-    @OneToMany(mappedBy = "keywords")
+    @OneToMany(mappedBy = "keyword")
     private List<InfoKeywords> infoKeywords;
 
     @OneToMany(mappedBy = "keyword")
